@@ -61,17 +61,112 @@ class AdaStaff extends Person {
   }
 }
 
+class AdaStudent extends Person{
+  #company;
+  #pathway;
+  #yearStarted;
 
-// Testing code
+  constructor(name, dateOfBirth, placeOfBirth,company,pathway,yearStarted){
+    super(name, dateOfBirth, placeOfBirth);
+    this.#company=company;
+    this.#pathway=pathway;
+    this.#yearStarted=yearStarted;
+  }
 
-const aqil = new Person("Aqil Hussain", "01/01/2000", "Manchester");
-const steve = new AdaStaff("Steve Rich", "01/01/1998", "Lincoln", "Lecturer", "Manchester");
+  get company(){
+    return this.#company;
+  }
 
+  set company(company) {
+    this.#company = company;
+  }
 
-console.log(steve);
-console.log(aqil);
-console.log(steve.talk());
-console.log(aqil.talk());
-console.log(steve.name);
-steve.name = "Stevano Rich";
-console.log(steve.name);
+  get pathway() {
+    return this.#pathway;
+  }
+
+  set pathway(pathway) {
+    this.#pathway = pathway;
+  }
+
+  get yearStarted() {
+    return this.#yearStarted;
+  }
+
+  set yearStarted(yearStarted) {
+    this.#yearStarted = yearStarted;
+  }
+
+  talk() {
+    return `Hi my name is ${this.name}. I work in ${this.company}, my pathway is ${this.pathway} which I started on ${this.yearStarted}.`;
+  }
+}
+
+class Cohort {
+
+  _cohortCode;
+    
+  constructor(cohortCode){
+    this._cohortCode = cohortCode;
+    this.cohort = [];
+  }
+  
+  add(adaStudent) {
+    this.cohort.push(adaStudent);
+    return this.cohort.length;
+  }
+
+  list() {
+    this.cohort.forEach(member => {
+      console.log(member.name);
+    });
+  }
+
+  // Method to remove a student by name using splice
+  removeStudentByName(name) {
+    const index = this.cohort.findIndex(student => student.name === name);
+    if (index !== -1) {
+      return this.cohort.splice(index, 1); // Remove the student and return the removed object
+    } else {
+      console.log(`${name} not found in the cohort.`);
+      return null;
+    }
+  }
+
+  // Method to search for students by name using map
+  searchStudentByName(name) {
+    return this.cohort
+      .map(student => student.name === name ? student : null)
+      .filter(student => student !== null); // Filter out null values
+  }
+
+}
+
+// Test the new functionality
+
+const october24 = new Cohort("24-10-LDN-MCR");
+
+const sumilA = new AdaStudent("Sumil Aryin", "22/12/2002", "London", "PwC", "TC", 2024);
+const jessF = new AdaStudent("Jess Fryer", "02/02/1998", "Manchester", "PwC", "TC", 2024);
+const darpit = new AdaStudent("Darpit Shah", "13/01/1992", "Dubai", "59A", "Data Analyst", "2024");
+
+october24.add(sumilA);
+october24.add(jessF);
+october24.add(darpit);
+
+// List current cohort
+console.log("Current cohort:");
+october24.list();
+
+// Remove a student by name
+console.log("Removing Sumil Aryin...");
+october24.removeStudentByName("Sumil Aryin");
+
+// List cohort after removal
+console.log("Cohort after removal:");
+october24.list();
+
+// Search for a student by name
+console.log("Searching for Jess Fryer:");
+const searchResult = october24.searchStudentByName("Jess Fryer");
+console.log(searchResult);
